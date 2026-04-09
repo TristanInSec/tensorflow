@@ -19,6 +19,7 @@ limitations under the License.
 #define XLA_PRIMITIVE_UTIL_H_
 
 #include <array>
+#include <climits>
 #include <cstdint>
 #include <limits>
 #include <string>
@@ -696,7 +697,7 @@ inline constexpr int PrimitiveTypeBitWidth() {
              (IsSignedIntegralType(primitive_type) ? 1 : 0);
     }
     if constexpr (primitive_type == PRED) {
-      return std::numeric_limits<NativeT>::digits;
+      return std::numeric_limits<uint8_t>::digits;
     }
     if constexpr (IsMXType(primitive_type)) {
       return NativeT::kBits;
@@ -770,7 +771,7 @@ inline constexpr int BitWidth(PrimitiveType type) {
 // type is not an array type.
 inline constexpr int StorageBitWidth(PrimitiveType type) {
   if (type == PRED) {
-    return 8;
+    return sizeof(bool) * CHAR_BIT;
   }
   return BitWidth(type);
 }
